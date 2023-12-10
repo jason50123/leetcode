@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+};
+
+struct ListNode* reverse(struct ListNode** head, int stop) {
+    struct ListNode* next = NULL;
+    struct ListNode* temp;
+    struct ListNode* tail = NULL; 
+
+    while (*head) {
+        if ((*head)->val == stop) {
+            next = (*head)->next; 
+            (*head)->next = NULL; 
+            break;
+        } else {
+            temp = malloc(sizeof(struct ListNode));
+            temp->val = (*head)->val;
+            temp->next = tail;
+            tail = temp; 
+            *head = (*head)->next;
+        }
+    }
+
+    if (*head) {
+        struct ListNode* current = tail;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = next;
+    }
+
+    return tail; 
+}
+
+struct ListNode* reverseBetween(struct ListNode* head, int left, int right) {
+    struct ListNode* newHead = head;
+    if (head == NULL) {
+        return NULL;
+    }
+    if (head->next == NULL) {
+        return head;
+    }
+
+    while (head->next != NULL) {
+        if (head->next->val == left) {
+            head->next = reverse(&(head->next), right);
+            break;
+        } else {
+            head = head->next;
+        }
+    }
+
+    return newHead;
+}

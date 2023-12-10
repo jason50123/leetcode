@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+};
+
+struct ListNode* deleteDuplicates(struct ListNode* head){
+    
+    //想法：先判斷是否為空
+    if(head == NULL){
+        return NULL;
+    }
+    //先建立兩個pointer指到head
+    struct ListNode *temp = head;
+    struct ListNode *temp_prev = head;
+    
+    //在下一個點如果不是空的情況下,我會讓temp pointer先往前走
+
+    while(temp ->next != NULL){
+        temp = temp ->next;
+        //往前走完,會比較現在的這個點跟下面一個點的val是不是一樣
+        while(temp_prev ->val == temp ->val){
+            //如果一樣的話我要先測試他是不是下一個點就是NULL了,如果是的話直接就把現在的點的next指向null
+            if(temp -> next == NULL){
+                temp_prev ->next = NULL;
+                return head;
+            }//如果不是的話,我就把現在這個點的next繞過重複的值,並且把temp的pointer繼續往前移看有沒有一樣的值
+            else{
+                temp_prev -> next = (temp_prev -> next) -> next;
+                temp = temp ->next;
+            }
+        }
+        //如果一樣的值都比完了,譬如果有11122,把一走完我就把指向1的pointer往前移,移到指向2的地方
+        temp_prev = temp_prev -> next;
+        //往前走的時候要先判斷說會不會是1112這種情況,如果是的話就直接把現在的pointer指到null並回傳 head pointer
+        if(temp_prev -> next == NULL){
+            return head;
+        }
+    }
+    return head;
+    
+}
